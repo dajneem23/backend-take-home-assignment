@@ -86,6 +86,11 @@ export const friendshipRequestRouter = router({
           friendUserId: input.friendUserId,
           status: FriendshipStatusSchema.Values['requested'],
         })
+        .onConflict((oc) =>
+          oc.columns(['userId', 'friendUserId']).doUpdateSet({
+            status: FriendshipStatusSchema.Values['requested'],
+          })
+        )
         .execute()
     }),
 

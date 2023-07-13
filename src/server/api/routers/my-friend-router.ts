@@ -40,10 +40,6 @@ export const myFriendRouter = router({
          *  - https://kysely-org.github.io/kysely/classes/SelectQueryBuilder.html#innerJoin
          */
         // Get the friend's profile
-        // mutualFriendCount(conn, {
-        //   userId: ctx.session.userId,
-        //   friendUserId: input.friendUserId,
-        // }).execute()
         conn
           .selectFrom('users as friends')
           .innerJoin('friendships', 'friendships.friendUserId', 'friends.id')

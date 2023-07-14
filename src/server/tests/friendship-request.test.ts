@@ -290,134 +290,134 @@ describe.concurrent('Friendship request', async () => {
       })
     )
   })
-})
 
-/**
- * Scenario:
- *  1. User B, C, D, E send friendship requests to user A
- *  2. User C,D sends a friendship request to user B
- *  3. User A accepts all the requests
- *  4. User B accepts all the requests
- *
- *  -> User A should have 2 mutual friend with user B
- */
-test('Question 4 / Scenario 3', async ({ expect }) => {
-  const [userA, userB, userC, userD, userE] = await Promise.all([
-    createUser(),
-    createUser(),
-    createUser(),
-    createUser(),
-    createUser(),
-  ])
+  /**
+   * Scenario:
+   *  1. User B, C, D, E send friendship requests to user A
+   *  2. User C,D sends a friendship request to user B
+   *  3. User A accepts all the requests
+   *  4. User B accepts all the requests
+   *
+   *  -> User A should have 2 mutual friend with user B
+   */
+  test('Question 4 / Scenario 3', async ({ expect }) => {
+    const [userA, userB, userC, userD, userE] = await Promise.all([
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+    ])
 
-  await Promise.all([
-    userB.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-    userC.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-    userD.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-    userE.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-    userC.sendFriendshipRequest({
-      friendUserId: userB.id,
-    }),
-    userD.sendFriendshipRequest({
-      friendUserId: userB.id,
-    }),
-  ])
+    await Promise.all([
+      userB.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+      userC.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+      userD.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+      userE.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+      userC.sendFriendshipRequest({
+        friendUserId: userB.id,
+      }),
+      userD.sendFriendshipRequest({
+        friendUserId: userB.id,
+      }),
+    ])
 
-  await Promise.all([
-    userA.acceptFriendshipRequest({
-      friendUserId: userB.id,
-    }),
-    userA.acceptFriendshipRequest({
-      friendUserId: userC.id,
-    }),
-    userA.acceptFriendshipRequest({
-      friendUserId: userD.id,
-    }),
-    userA.acceptFriendshipRequest({
-      friendUserId: userE.id,
-    }),
-    userB.acceptFriendshipRequest({
-      friendUserId: userC.id,
-    }),
-    userB.acceptFriendshipRequest({
-      friendUserId: userD.id,
-    }),
-  ])
-  //= > should have 2 mutual friends
-  await expect(
-    userB.getFriendById({
-      friendUserId: userA.id,
-    })
-  ).resolves.toEqual(
-    expect.objectContaining({
-      id: userA.id,
-      mutualFriendCount: 2,
-    })
-  )
-})
+    await Promise.all([
+      userA.acceptFriendshipRequest({
+        friendUserId: userB.id,
+      }),
+      userA.acceptFriendshipRequest({
+        friendUserId: userC.id,
+      }),
+      userA.acceptFriendshipRequest({
+        friendUserId: userD.id,
+      }),
+      userA.acceptFriendshipRequest({
+        friendUserId: userE.id,
+      }),
+      userB.acceptFriendshipRequest({
+        friendUserId: userC.id,
+      }),
+      userB.acceptFriendshipRequest({
+        friendUserId: userD.id,
+      }),
+    ])
+    //= > should have 2 mutual friends
+    await expect(
+      userB.getFriendById({
+        friendUserId: userA.id,
+      })
+    ).resolves.toEqual(
+      expect.objectContaining({
+        id: userA.id,
+        mutualFriendCount: 2,
+      })
+    )
+  })
 
-/**
- * Scenario:
- *  1. User B, C, D, E send friendship requests to user A
- *  2. User A accepts all the requests
- *
- *  -> User A should have 0 mutual friend with user B
- */
-test('Question 4 / Scenario 4', async ({ expect }) => {
-  const [userA, userB, userC, userD, userE] = await Promise.all([
-    createUser(),
-    createUser(),
-    createUser(),
-    createUser(),
-    createUser(),
-  ])
+  /**
+   * Scenario:
+   *  1. User B, C, D, E send friendship requests to user A
+   *  2. User A accepts all the requests
+   *
+   *  -> User A should have 0 mutual friend with user B
+   */
+  test('Question 4 / Scenario 4', async ({ expect }) => {
+    const [userA, userB, userC, userD, userE] = await Promise.all([
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+    ])
 
-  await Promise.all([
-    userB.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-    userC.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-    userD.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-    userE.sendFriendshipRequest({
-      friendUserId: userA.id,
-    }),
-  ])
+    await Promise.all([
+      userB.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+      userC.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+      userD.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+      userE.sendFriendshipRequest({
+        friendUserId: userA.id,
+      }),
+    ])
 
-  await Promise.all([
-    userA.acceptFriendshipRequest({
-      friendUserId: userB.id,
-    }),
-    userA.acceptFriendshipRequest({
-      friendUserId: userC.id,
-    }),
-    userA.acceptFriendshipRequest({
-      friendUserId: userD.id,
-    }),
-    userA.acceptFriendshipRequest({
-      friendUserId: userE.id,
-    }),
-  ])
-  //= > should have 0 mutual friends
-  await expect(
-    userB.getFriendById({
-      friendUserId: userA.id,
-    })
-  ).resolves.toEqual(
-    expect.objectContaining({
-      id: userA.id,
-      mutualFriendCount: 0,
-    })
-  )
+    await Promise.all([
+      userA.acceptFriendshipRequest({
+        friendUserId: userB.id,
+      }),
+      userA.acceptFriendshipRequest({
+        friendUserId: userC.id,
+      }),
+      userA.acceptFriendshipRequest({
+        friendUserId: userD.id,
+      }),
+      userA.acceptFriendshipRequest({
+        friendUserId: userE.id,
+      }),
+    ])
+    //= > should have 0 mutual friends
+    await expect(
+      userB.getFriendById({
+        friendUserId: userA.id,
+      })
+    ).resolves.toEqual(
+      expect.objectContaining({
+        id: userA.id,
+        mutualFriendCount: 0,
+      })
+    )
+  })
 })

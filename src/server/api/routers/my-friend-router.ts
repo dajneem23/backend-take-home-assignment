@@ -225,26 +225,20 @@ const mutualFriendsCount = (
       db
         .selectFrom('acceptedFriendships')
         .select([
-          'acceptedFriendships.friendUserId as friendFriends_friendUserId',
-          'acceptedFriendships.userId as friendFriends_userId',
+          'acceptedFriendships.friendUserId',
+          'acceptedFriendships.userId',
         ])
     )
     .selectFrom('userFriends')
     .innerJoin('friendFriends', (join) =>
       join
-        .onRef(
-          'friendFriends.friendFriends_friendUserId',
-          '=',
-          'userFriends.friendUserId'
-        )
-        .onRef('friendFriends.friendFriends_userId', '!=', 'userFriends.userId')
+        .onRef('friendFriends.friendUserId', '=', 'userFriends.friendUserId')
+        .onRef('friendFriends.userId', '!=', 'userFriends.userId')
     )
     .groupBy(['userFriends.userId', 'userFriends.friendUserId'])
     .select((eb) => [
       'userFriends.userId',
       'userFriends.friendUserId',
-      eb.fn
-        .count('friendFriends.friendFriends_friendUserId')
-        .as('mutualFriendCount'),
+      eb.fn.count('friendFriends.friendUserId').as('mutualFriendCount'),
     ])
 }
